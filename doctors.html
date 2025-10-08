@@ -259,15 +259,32 @@
 
     /* Responsive */
     @media (max-width: 600px) {
-      .search-section {
-        flex-direction: column;
-        align-items: stretch;
-      }
+    .search-section {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 0.5rem;
+    padding: 0 1rem;
+  }
 
-      .search-input {
-        min-width: 100%;
-      }
-    }
+  .search-input {
+    display: inline-block !important;
+    flex: 0 0 auto !important;
+    width: 100%;
+    max-width: 100%;
+    min-width: unset;
+    height: 40px !important;            /* force normal height */
+    padding: 0 0.75rem !important;      /* slim padding */
+    font-size: 0.9rem;
+    border-radius: 6px;
+    line-height: 40px;                  /* vertically centers text */
+    box-sizing: border-box;
+    -webkit-appearance: none;           /* remove mobile default styles */
+    -moz-appearance: none;
+    appearance: none;
+  }
+
+  }
   </style>
 </head>
 
@@ -307,7 +324,7 @@
         clinic: "iDoctor Vision Center",
         phone: "+639171234567",
         email: "jan.sayco@example.com",
-        avatar: "https://randomuser.me/api/portraits/women/44.jpg"
+        avatar: ""
       },
       {
         id: 2,
@@ -317,7 +334,7 @@
         clinic: "Our Lady Of Fatima University Medical Center",
         phone: "+639181234567",
         email: "minerva.manalili@example.com",
-        avatar: "https://randomuser.me/api/portraits/men/46.jpg"
+        avatar: ""
       },
       {
         id: 3,
@@ -327,7 +344,7 @@
         clinic: "Our Lady Of Fatima University Medical Center",
         phone: "+639191234567",
         email: "aillen.abines@example.com",
-        avatar: "https://randomuser.me/api/portraits/women/65.jpg"
+        avatar: ""
       },
       {
         id: 4,
@@ -337,7 +354,7 @@
         clinic: "The Medical City",
         phone: "+639201234567",
         email: "carlos.mendoza@example.com",
-        avatar: "https://randomuser.me/api/portraits/men/52.jpg"
+        avatar: ""
       },
       {
         id: 5,
@@ -347,7 +364,7 @@
         clinic: "Bonifacio Global City Clinic",
         phone: "+639211234567",
         email: "liza.cruz@example.com",
-        avatar: "https://randomuser.me/api/portraits/women/22.jpg"
+        avatar: ""
       },
       {
         id: 6,
@@ -357,7 +374,7 @@
         clinic: "Mandaluyong Eye Center",
         phone: "+639221234567",
         email: "ramon.garcia@example.com",
-        avatar: "https://randomuser.me/api/portraits/men/33.jpg"
+        avatar: ""
       },
       {
         id: 7,
@@ -367,7 +384,7 @@
         clinic: "Pasay Medical Clinic",
         phone: "+639231234567",
         email: "teresa.lim@example.com",
-        avatar: "https://randomuser.me/api/portraits/women/12.jpg"
+        avatar: ""
       },
       {
         id: 8,
@@ -377,7 +394,7 @@
         clinic: "Makati Medical Center",
         phone: "+639241234567",
         email: "miguel.santos@example.com",
-        avatar: "https://randomuser.me/api/portraits/men/24.jpg"
+        avatar: ""
       }
     ];
 
