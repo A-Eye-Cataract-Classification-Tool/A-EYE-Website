@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>A-EYE: Find Ophthalmologist</title>
+  <style>
+    /* Reset and base */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+        "Open Sans", "Helvetica Neue", sans-serif;
+      background-color: #161616;
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    a:hover,
+    a:focus {
+      text-decoration: underline;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem 4rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin: 0;
+      color: #8a88ff;
+    }
+
+    /* Search Section */
+    .search-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    .search-input {
+      background: #2c2c2e;
+      border: none;
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      color: #d1d1d6;
+      font-size: 1rem;
+      min-width: 250px;
+      flex: 1 1 250px;
+      transition: background-color 0.3s ease;
+    }
+
+    .search-input::placeholder {
+      color: #8e8e93;
+    }
+
+    .search-input:focus {
+      outline: none;
+      background: #444446;
+      color: #fff;
+    }
+
+    /* Doctors Grid */
+    .doctors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* Doctor Card */
+    .doctor-card {
+      background: #2c2c2e;
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      box-shadow: 0 0 15px rgba(138, 136, 255, 0.3);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .doctor-card:hover {
+      box-shadow: 0 0 25px rgba(138, 136, 255, 0.6);
+    }
+
+    .doctor-avatar {
+      width: 100%;
+      max-width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto;
+      border: 3px solid #8a88ff;
+      box-shadow: 0 0 10px rgba(138, 136, 255, 0.5);
+    }
+
+    .doctor-info {
+      text-align: center;
+      flex-grow: 1;
+    }
+
+    .doctor-name {
+      font-weight: 700;
+      font-size: 1.25rem;
+      margin: 0.25rem 0;
+      color: #fff;
+      letter-spacing: 0.02em;
+    }
+
+    .doctor-specialty {
+      font-weight: 600;
+      font-size: 1rem;
+      color: #b3b3b3;
+      margin: 0.25rem 0;
+    }
+
+    .doctor-location,
+    .doctor-clinic {
+      font-weight: 400;
+      font-size: 0.9rem;
+      color: #d1d1d6;
+      margin: 0.15rem 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Contact Icons */
+    .doctor-contact {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: auto;
+    }
+
+    .contact-link {
+      color: #8a88ff;
+      font-size: 1.5rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #161616;
+      box-shadow: 0 0 8px rgba(138, 136, 255, 0.5);
+      transition: background-color 0.3s ease, color 0.3s ease;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .contact-link:hover,
+    .contact-link:focus {
+      background: #8a88ff;
+      color: #161616;
+      outline: none;
+    }
+
+    /* Icons SVG */
+    .icon-phone,
+    .icon-email {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    /* Pagination */
+    .pagination {
+      margin-top: 3rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .page-btn {
+      background: #2c2c2e;
+      border-radius: 12px;
+      padding: 0.5rem 1rem;
+      color: #8a88ff;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      min-width: 40px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .page-btn:hover,
+    .page-btn:focus {
+      background: #8a88ff;
+      color: #161616;
+      outline: none;
+    }
+
+    .page-btn[disabled] {
+      opacity: 0.5;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    /* Close Button */
+    .close-button {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: #2c2c2e;
+      color: #b3b3b3;
+      font-size: 1.5rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 40px;
+      text-decoration: none;
+      box-shadow: 0 0 10px rgba(138, 136, 255, 0.5);
+      transition: background-color 0.3s ease, color 0.3s ease;
+      z-index: 1000;
+    }
+
+    .close-button:hover,
+    .close-button:focus {
+      background: #8a88ff;
+      color: #161616;
+      outline: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+    .search-section {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 0.5rem;
+    padding: 0 1rem;
+  }
+
+  .search-input {
+    display: inline-block !important;
+    flex: 0 0 auto !important;
+    width: 100%;
+    max-width: 100%;
+    min-width: unset;
+    height: 40px !important;            /* force normal height */
+    padding: 0 0.75rem !important;      /* slim padding */
+    font-size: 0.9rem;
+    border-radius: 6px;
+    line-height: 40px;                  /* vertically centers text */
+    box-sizing: border-box;
+    -webkit-appearance: none;           /* remove mobile default styles */
+    -moz-appearance: none;
+    appearance: none;
+  }
+
+  }
+  </style>
+</head>
+
+<body>
+  <a href="index.html" class="close-button" aria-label="Close and return to homepage">×</a>
+
+  <div class="container" role="main">
+    <header>
+      <h1>Find Ophthalmologist</h1>
+    </header>
+
+    <section class="search-section" aria-label="Search doctors">
+      <input type="text" id="search-name" class="search-input" placeholder="Search by name" aria-label="Search by doctor name" />
+      <input type="text" id="search-specialty" class="search-input" placeholder="Search by specialty" aria-label="Search by specialty" />
+      <input type="text" id="search-location" class="search-input" placeholder="Search by location" aria-label="Search by location" />
+    </section>
+
+    <section class="doctors-grid" id="doctors-grid" aria-live="polite" aria-label="List of doctors">
+      <!-- Doctor cards inserted by JS -->
+    </section>
+
+    <nav class="pagination" aria-label="Pagination">
+      <button class="page-btn" id="prev-page" aria-label="Previous page" disabled>Prev</button>
+      <span id="page-info" aria-live="polite" style="align-self:center; color:#b3b3b3; font-weight:600;"></span>
+      <button class="page-btn" id="next-page" aria-label="Next page">Next</button>
+    </nav>
+  </div>
+
+  <script>
+    // Sample doctor data - replace or extend as needed
+    const doctors = [
+      {
+        id: 1,
+        name: "Dr. Jan Edward Sayco",
+        specialty: "Ophthalmologist",
+        location: "Valenzuela, Philippines",
+        clinic: "iDoctor Vision Center",
+        phone: "+639171234567",
+        email: "jan.sayco@example.com",
+        avatar: ""
+      },
+      {
+        id: 2,
+        name: "Dr. Minerva Manalili-Murakami",
+        specialty: "Ophthalmologist",
+        location: "Valenzuela, Philippines",
+        clinic: "Our Lady Of Fatima University Medical Center",
+        phone: "+639181234567",
+        email: "minerva.manalili@example.com",
+        avatar: ""
+      },
+      {
+        id: 3,
+        name: "Dr. Aillen Abines",
+        specialty: "Ophthalmologist",
+        location: "Valenzuela, Philippines",
+        clinic: "Our Lady Of Fatima University Medical Center",
+        phone: "+639191234567",
+        email: "aillen.abines@example.com",
+        avatar: ""
+      },
+      {
+        id: 4,
+        name: "Dr. Carlos Mendoza",
+        specialty: "Glaucoma Specialist",
+        location: "Pasig, Philippines",
+        clinic: "The Medical City",
+        phone: "+639201234567",
+        email: "carlos.mendoza@example.com",
+        avatar: ""
+      },
+      {
+        id: 5,
+        name: "Dr. Liza Cruz",
+        specialty: "Pediatric Ophthalmologist",
+        location: "Taguig, Philippines",
+        clinic: "Bonifacio Global City Clinic",
+        phone: "+639211234567",
+        email: "liza.cruz@example.com",
+        avatar: ""
+      },
+      {
+        id: 6,
+        name: "Dr. Ramon Garcia",
+        specialty: "Cornea Specialist",
+        location: "Mandaluyong, Philippines",
+        clinic: "Mandaluyong Eye Center",
+        phone: "+639221234567",
+        email: "ramon.garcia@example.com",
+        avatar: ""
+      },
+      {
+        id: 7,
+        name: "Dr. Teresa Lim",
+        specialty: "Oculoplastic Surgeon",
+        location: "Pasay, Philippines",
+        clinic: "Pasay Medical Clinic",
+        phone: "+639231234567",
+        email: "teresa.lim@example.com",
+        avatar: ""
+      },
+      {
+        id: 8,
+        name: "Dr. Miguel Santos",
+        specialty: "Neuro-Ophthalmologist",
+        location: "Makati, Philippines",
+        clinic: "Makati Medical Center",
+        phone: "+639241234567",
+        email: "miguel.santos@example.com",
+        avatar: ""
+      }
+    ];
+
+    const doctorsPerPage = 4;
+    let currentPage = 1;
+    let filteredDoctors = doctors;
+
+    const doctorsGrid = document.getElementById('doctors-grid');
+    const prevBtn = document.getElementById('prev-page');
+    const nextBtn = document.getElementById('next-page');
+    const pageInfo = document.getElementById('page-info');
+
+    const searchName = document.getElementById('search-name');
+    const searchSpecialty = document.getElementById('search-specialty');
+    const searchLocation = document.getElementById('search-location');
+
+    function createDoctorCard(doctor) {
+      const card = document.createElement('article');
+      card.className = 'doctor-card';
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('aria-label', `Doctor ${doctor.name}, specialty ${doctor.specialty}, located in ${doctor.location}`);
+
+      card.innerHTML = `
+        <img src="${doctor.avatar}" alt="Photo of ${doctor.name}" class="doctor-avatar" loading="lazy" />
+        <div class="doctor-info">
+          <h2 class="doctor-name">${doctor.name}</h2>
+          <p class="doctor-specialty">${doctor.specialty}</p>
+          <p class="doctor-location" title="${doctor.location}">${doctor.location}</p>
+          <p class="doctor-clinic" title="${doctor.clinic}">${doctor.clinic}</p>
+        </div>
+        <div class="doctor-contact">
+          <a href="tel:${doctor.phone}" class="contact-link" aria-label="Call ${doctor.name}">
+            <svg class="icon-phone" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a href="mailto:${doctor.email}" class="contact-link email-link" aria-label="Email ${doctor.name}" data-email="${doctor.email}" data-name="${doctor.name}">
+            <svg class="icon-email" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+              <path d="M4 4h16v16H4z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      `;
+      return card;
+    }
+
+    function renderDoctors() {
+      doctorsGrid.innerHTML = '';
+      const start = (currentPage - 1) * doctorsPerPage;
+      const end = start + doctorsPerPage;
+      const pageDoctors = filteredDoctors.slice(start, end);
+
+      if (pageDoctors.length === 0) {
+        doctorsGrid.innerHTML = '<p style="text-align:center; color:#b3b3b3;">No doctors found.</p>';
+      } else {
+        pageDoctors.forEach(doc => {
+          doctorsGrid.appendChild(createDoctorCard(doc));
+        });
+      }
+
+      pageInfo.textContent = `Page ${currentPage} of ${Math.max(1, Math.ceil(filteredDoctors.length / doctorsPerPage))}`;
+      prevBtn.disabled = currentPage === 1;
+      nextBtn.disabled = currentPage >= Math.ceil(filteredDoctors.length / doctorsPerPage);
+    }
+
+    function filterDoctors() {
+      const nameVal = searchName.value.trim().toLowerCase();
+      const specialtyVal = searchSpecialty.value.trim().toLowerCase();
+      const locationVal = searchLocation.value.trim().toLowerCase();
+
+      filteredDoctors = doctors.filter(doc => {
+        const matchesName = doc.name.toLowerCase().includes(nameVal);
+        const matchesSpecialty = doc.specialty.toLowerCase().includes(specialtyVal);
+        const matchesLocation = doc.location.toLowerCase().includes(locationVal);
+        return matchesName && matchesSpecialty && matchesLocation;
+      });
+
+      currentPage = 1;
+      renderDoctors();
+    }
+
+    prevBtn.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderDoctors();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (currentPage < Math.ceil(filteredDoctors.length / doctorsPerPage)) {
+        currentPage++;
+        renderDoctors();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+
+    searchName.addEventListener('input', filterDoctors);
+    searchSpecialty.addEventListener('input', filterDoctors);
+    searchLocation.addEventListener('input', filterDoctors);
+
+    // Email click handler to open mailto with prefilled subject and body including user details and cataract results
+    document.addEventListener('click', function (e) {
+      const emailLink = e.target.closest('.email-link');
+      if (emailLink) {
+        e.preventDefault();
+        const email = emailLink.getAttribute('data-email');
+        const name = emailLink.getAttribute('data-name');
+        const subject = encodeURIComponent(`Inquiry from A-EYE`);   
+        
+        // Placeholder for user details and cataract results.
+        // In a real application, you would dynamically get this data.
+        const userName = "John Doe"; // Replace with actual user name
+        const userEmail = "john.doe@example.com"; // Replace with actual user email
+        const cataractResult = "Cataract Detected: Mature (Right Eye)"; // Replace with actual cataract result
+
+        const body = encodeURIComponent(`Dear ${name},\n\nI am writing to you from A-EYE regarding a potential patient inquiry.\n\nPatient Name: ${userName}\nPatient Email: ${userEmail}\nCataract Scan Result: ${cataractResult}\n\nPlease let me know your availability for an on-site consultation.\n\nSincerely,\nJohn Doe`);
+        
+        window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+      }
+    });
+
+    // Initial render
+    filterDoctors();
+  </script>
+</body>
+
+</html>
